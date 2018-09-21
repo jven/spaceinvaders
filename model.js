@@ -54,8 +54,14 @@ spaceinvaders.model.GoodGuy.prototype.update = function(timeElapsedMs) {
     dx *= 0.75;
     dy *= 0.75;
   }
-  this.gameObject.position.x += dx;
-  this.gameObject.position.y += dy;
+  var newX = this.gameObject.position.x + dx;
+  var newY = this.gameObject.position.y + dy;
+  this.gameObject.position.x = Math.min(
+      this.gameObject.map.maxX - this.gameObject.shape.widthX,
+      Math.max(0, newX));
+  this.gameObject.position.y = Math.min(
+      this.gameObject.map.maxY - this.gameObject.shape.widthY,
+      Math.max(0, newY));
 };
 
 spaceinvaders.model.Enemy = function(
