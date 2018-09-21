@@ -13,31 +13,50 @@ spaceinvaders.model.GoodGuy = function(
   this.weaponVelocityPerMs = weaponVelocityPerMs;
   this.movementVelocityPerMs = movementVelocityPerMs;
   this.weaponCooldownMs = 0;
-  this.dx = 0;
+  this.movingUp_ = false;
+  this.movingRight_ = false;
+  this.movingDown_ = false;
+  this.movingLeft_ = false;
 };
 
-// spaceinvaders.model.GoodGuy.prototype.movingRight = function() {
-//   this.dx = movementVelocityPerMs;
-// };
+spaceinvaders.model.GoodGuy.prototype.setMovingUp = function(moving) {
+  this.movingUp_ = moving;
+};
 
-// spaceinvaders.model.GoodGuy.prototype.movingLeft = function() {
-//   this.dx = -movementVelocityPerMs;
-// };
+spaceinvaders.model.GoodGuy.prototype.setMovingRight = function(moving) {
+  this.movingRight_ = moving;
+};
 
-// spaceinvaders.model.GoodGuy.prototype.notMovingLeftOrRight = function() {
-//   this.dx = 0;
-// };
+spaceinvaders.model.GoodGuy.prototype.setMovingDown = function(moving) {
+  this.movingDown_ = moving;
+};
 
-// spaceinvaders.model.GoodGuy.prototype.tick = function(timeMs) {
-//   this.weaponCooldownMs = Math.max(this.weaponCooldownMs - timeMs, 0);
+spaceinvaders.model.GoodGuy.prototype.setMovingLeft = function(moving) {
+  this.movingLeft_ = moving;
+};
 
-//   if (this.dx != 0) {
-//     var newX = this.gameObject.position.x + (timeMs * this.dx);
-//     newX = Math.max(newX, 0);
-//     newX = Math.min(newX, this.gameObject.map.maxX);
-//     this.gameObject.position.x = newX;
-//   }
-// };
+spaceinvaders.model.GoodGuy.prototype.update = function(timeElapsedMs) {
+  var dx = 0;
+  var dy = 0;
+  if (this.movingLeft_ && !this.movingRight_) {
+    dx = -this.movementVelocityPerMs * timeElapsedMs;
+  }
+  if (this.movingRight_ && !this.movingLeft_) {
+    dx = this.movementVelocityPerMs * timeElapsedMs;
+  }
+  if (this.movingUp_ && !this.movingDown_) {
+    dy = -this.movementVelocityPerMs * timeElapsedMs;
+  }
+  if (this.movingDown_ && !this.movingUp_) {
+    dy = this.movementVelocityPerMs * timeElapsedMs;
+  }
+  if (dx * dy != 0) {
+    dx *= 0.75;
+    dy *= 0.75;
+  }
+  this.gameObject.position.x += dx;
+  this.gameObject.position.y += dy;
+};
 
 spaceinvaders.model.Enemy = function(
     gameObject,
@@ -86,6 +105,9 @@ spaceinvaders.model.Model = function(map, goodGuy, enemies) {
 };
 
 spaceinvaders.model.Model.prototype.update = function(timeElapsedMs) {
+  // Update the good guy.
+  this.goodGuy.update(timeElapsedMs);
+
   // Update the enemies.
   for (var i = 0; i < this.enemies.length; i++) {
     this.enemies[i].update(timeElapsedMs);
@@ -117,7 +139,7 @@ spaceinvaders.model.Model.createDefault = function() {
               (mapMaxX - goodGuyWidthX) / 2, mapMaxY - goodGuyWidthY - 20)),
       500 /* weaponMaxCooldownMs */,
       1 /* weaponVelocityPerMs */,
-      0.03 /* movementVelocityPerMs */);
+      0.1 /* movementVelocityPerMs */);
   var enemies = [];
   for (var i = 0; i < numEnemyRows; i++) {
     for (var j = 0; j < enemiesPerRow; j++) {

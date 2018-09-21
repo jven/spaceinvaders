@@ -25,6 +25,7 @@ spaceinvaders.game.startGame = function() {
   var model = spaceinvaders.model.Model.createDefault();
   var view = new spaceinvaders.view.View(
       model, document.getElementById('gameElement'));
+  var controller = new spaceinvaders.controller.Controller(model, view);
   var game = new spaceinvaders.game.Game(model, view);
   window.requestAnimationFrame(game.tick.bind(game));
 };
