@@ -91,11 +91,6 @@ spaceinvaders.model.Enemy.prototype.update = function(timeElapsedMs) {
   }
 };
 
-// spaceinvaders.model.Bullet = function(gameObject, velocityPerMs) {
-//   this.gameObject = gameObject;
-//   this.velocityPerMs = velocityPerMs;
-// };
-
 spaceinvaders.model.GameObject = function(map, birthdayMs, shape, position) {
   this.map = map;
   this.birthdayMs = birthdayMs;
@@ -165,13 +160,3 @@ spaceinvaders.model.Model.createDefault = function() {
   }
   return new spaceinvaders.model.Model(map, goodGuy, enemies);
 };
-
-// spaceinvaders.model.Model.prototype.tick = function(tickTimeMs) {
-//   this.goodGuy.tick(tickTimeMs);
-//   for (var i = 0; i < this.enemies.length; i++) {
-//     this.enemies[i].tick(tickTimeMs);
-//   }
-//   for (var i = 0; i < this.bullets.length; i++) {
-//     this.bullets[i].tick(tickTimeMs);
-//   }
-// }
